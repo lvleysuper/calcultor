@@ -4,7 +4,17 @@
 #include <iostream>
 using namespace std;
 
-class IStack {};
+const int maxBuf = 256;
+class IStack 
+{
+public:
+	bool IsFull() { return _done;}
+	bool IsEmpty() {return _done;}
+	void Push(int num){} 
+	int Pop() {return 1;}
+private:
+	bool _done;
+};
 
 class StackSeq
 {
@@ -32,9 +42,18 @@ private:
 class Input
 {
 public:
+	enum Token {tokNumber,tokError};
 	Input(){
 		cout <<"create input " << endl;
 	}
+	int Token() const {
+		return _token;
+	}
+	int Number() const {return 0;}
+
+private:
+	int _token;
+	char _buf[maxBuf];
 };
 
 class Calculator
@@ -43,10 +62,8 @@ public:
 	Calculator():_done(false){
 		cout <<"create calculator " <<endl;
 	}
-	bool Execute(Input& input){
-		cout <<"Calculator::Execute " << endl;
-		return !_done;
-	}
+	int Calculate(int num1,int num2,char token);
+	bool Execute(Input& input);
 	const IStack& GetStack() {
 		_done = true;
 		return _stack;
