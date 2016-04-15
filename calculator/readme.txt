@@ -1,1 +1,1 @@
-create a new branch is quick in 
+create a new branch is qick in 
