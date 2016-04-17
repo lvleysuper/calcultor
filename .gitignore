@@ -3,10 +3,16 @@
 *.lo
 *.o
 *.obj
+*.ilk
+*.log
+*.idb
+*.pdb
 
 # Project tmp file 
 *.sdf
 *.opensdf
+*.sln
+*.suo
 
 # Precompiled Headers
 *.gch
@@ -30,3 +36,6 @@
 *.exe
 *.out
 *.app
+
+# Exclude Folder
+Debug
