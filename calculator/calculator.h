@@ -2,40 +2,54 @@
 #define __CALC_H__
 
 #include <iostream>
+#include <cstdlib>
+#include <assert.h>
 using namespace std;
 
 const int maxBuf = 256;
+const int maxStackSize = 256;
+class StackSeq;
 class IStack 
 {
 public:
-	bool IsFull() { return _done;}
-	bool IsEmpty() {return _done;}
-	void Push(int num){} 
-	int Pop() {return 1;}
+	friend class StackSeq;
+	IStack() :_top(0){}
+	bool IsFull() { return _top == maxStackSize;}
+	bool IsEmpty() {return _top == 0;}
+	void Push(int num){
+		assert(_top < maxStackSize-2);
+		_arr[_top++] = num;
+	} 
+	int Pop() {
+		assert(_top > 0);
+		return _arr[--_top];
+	}
 private:
-	bool _done;
+	int _top;
+	int _arr[maxStackSize];
 };
 
 class StackSeq
 {
 public:
-	StackSeq(const IStack& stack):_stack(stack),_done(false) {
-		cout <<"create stack sequencer " << endl;
+	StackSeq(const IStack& stack):_stack(stack),_iCur(0) {
 	}
 	bool AtEnd() const {
-		return _done;
+		return _iCur == _stack._top;
 	}
 	void Advance(){
-		_done = true;
+		assert(!AtEnd());
+		++_iCur;
 	}
 
 	int GetNum(){
-		return 13;
+		assert(!AtEnd());
+		return _stack._arr[_iCur];
 	}
 
 private:
 	const IStack& _stack;
-	bool _done;
+	int _iCur;
 };
 
 
@@ -43,13 +57,14 @@ class Input
 {
 public:
 	enum Token {tokNumber,tokError};
-	Input(){
-		cout <<"create input " << endl;
-	}
+	Input();
 	int Token() const {
 		return _token;
 	}
-	int Number() const {return 0;}
+	int Number() const {
+		assert(_token == tokNumber);
+		return atoi(_buf);
+	}
 
 private:
 	int _token;
@@ -59,19 +74,15 @@ private:
 class Calculator
 {
 public:
-	Calculator():_done(false){
-		cout <<"create calculator " <<endl;
-	}
 	int Calculate(int num1,int num2,char token);
 	bool Execute(Input& input);
 	const IStack& GetStack() {
-		_done = true;
 		return _stack;
 	}
 private:
 	IStack _stack;
-	bool _done;
 };
+
 
 
 

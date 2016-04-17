@@ -64,3 +64,24 @@ int Calculator::Calculate( int num1,int num2,char token )
 	return result;
 }
 
+Input::Input()
+{
+	cin >> _buf;
+	int c = _buf[0];
+	if (isdigit(c)){
+		_token = tokNumber;
+	}
+	else if (c == '+' || c == '*' || c == '/'){
+		_token = c;
+	}
+	else if(c=='-'){
+		if (isdigit(_buf[1])){
+			_token = tokNumber;
+		}
+		else
+			_token = c;
+	}
+	else{
+		_token = tokError;
+	}
+}
