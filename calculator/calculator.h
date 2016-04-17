@@ -4,7 +4,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <assert.h>
+#include <string.h>
 using namespace std;
+
+#ifdef _WIN32
+#pragma warning(disable:4800)
+#endif
 
 const int maxBuf = 256;
 const int maxStackSize = 256;
@@ -23,6 +28,9 @@ public:
 	int Pop() {
 		assert(_top > 0);
 		return _arr[--_top];
+	}
+	void Reset(){
+		_top = 0;
 	}
 private:
 	int _top;
@@ -56,7 +64,7 @@ private:
 class Input
 {
 public:
-	enum Token {tokNumber,tokError};
+	enum Token {tokNumber,tokBool,tokError};
 	Input();
 	int Token() const {
 		return _token;
@@ -64,6 +72,15 @@ public:
 	int Number() const {
 		assert(_token == tokNumber);
 		return atoi(_buf);
+	}
+	bool Bool() const{
+		if (_token == tokBool){
+			if (strcmp(_buf, "true") == 0) return true;
+			else return false;
+		}
+		else {
+			return (bool)atoi(_buf);
+		}
 	}
 
 private:
@@ -74,13 +91,20 @@ private:
 class Calculator
 {
 public:
+	enum CalcType {NUMBER_CALC,LOGIC_CALC};
+	Calculator(int type = NUMBER_CALC) :_type(type){}
 	int Calculate(int num1,int num2,char token);
+	bool Calculate(bool t, bool f, char token);
 	bool Execute(Input& input);
 	const IStack& GetStack() {
 		return _stack;
 	}
+	int Type() const{
+		return _type;
+	}
 private:
 	IStack _stack;
+	int _type;
 };
 
 

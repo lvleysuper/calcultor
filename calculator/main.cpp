@@ -2,7 +2,7 @@
 
 int main()
 {
-	Calculator TheCalc;
+	Calculator TheCalc(Calculator::LOGIC_CALC);
 	bool stauts;
 	do 
 	{
@@ -13,7 +13,15 @@ int main()
 		{
 			for (StackSeq seq(TheCalc.GetStack());!seq.AtEnd();seq.Advance())
 			{
-				cout << " " << seq.GetNum() << endl;
+				if (TheCalc.Type() == Calculator::LOGIC_CALC){
+					cout << boolalpha << (bool)seq.GetNum() << endl;
+				}
+				else {
+					if (input.Token() == 'x')
+						cout << hex << " " << seq.GetNum() << endl;
+					else 
+						cout << dec <<" " << seq.GetNum() << endl;
+				}
 			}
 		}
 	} while (stauts);
