@@ -4,6 +4,17 @@
 #include <iostream>
 using namespace std;
 
+const int hashTableSize = 127;
+int hash(const char* str)
+{
+	unsigned h  = str[0];
+	for (int i=1;str[i]!=0;++i)
+	{
+		h = (h << 4) + str[i];
+	}
+	return h % hashTableSize;
+}
+
 const int maxBuf = 256;
 class IStack 
 {
