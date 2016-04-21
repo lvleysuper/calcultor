@@ -1,5 +1,4 @@
 #include "calculator.h"
-#include <assert.h>
 
 
 bool Calculator::Execute( Input& input )
@@ -19,8 +18,28 @@ bool Calculator::Execute( Input& input )
 			status = true;
 		}
 	}
+	else if (token == Input::tokBool){
+		if (_stack.IsFull()){
+			cout << "Stack is full " << endl;
+		}
+		else{
+			_stack.Push(input.Bool());
+			status = true;
+		}
+	}
+	else if (token == 'x'){
+		status = true;
+	}
+	else if (token == 'r'){
+		_stack.Reset();
+		status = true;
+	}
+	else if(token == 'q'){
+		status = false;
+	}
 	else{
-		assert(token == '+' ||token == '-' ||token == '*' ||token == '/');
+		assert(token == '+' ||token == '-' ||token == '*' ||token == '/' || token == '&' || token =='|' || token == '^'
+			|| token == '!');
 		if(_stack.IsEmpty()){
 			cout <<"Stack is empty " << endl;
 		}
@@ -32,7 +51,10 @@ bool Calculator::Execute( Input& input )
 			else 
 				num1 = _stack.Pop();
 
-			_stack.Push(Calculate(num1,num2,token));
+			if (_type == NUMBER_CALC)
+				_stack.Push(Calculate(num1, num2, token));
+			else
+				_stack.Push(Calculate((bool)num1, (bool)num2, token));
 			status = true;
 		}
 	}
@@ -60,7 +82,56 @@ int Calculator::Calculate( int num1,int num2,char token )
 		else 
 			result = num1 / num2;
 	}
+	else if (token == '&'){
+		result = num1 & num2;
+	}
+	else if (token == '|'){
+		result = num1 | num2;
+	}
+	else if (token == '^'){
+		result = num1 ^ num2;
+	}
 
 	return result;
 }
 
+bool Calculator::Calculate(bool t, bool f, char token)
+{
+	bool result;
+	if (token == '&'){
+		result = t & f;
+	}
+	else if (token == '|'){
+		result = t | f;
+	}
+	else if (token == '!'){
+		result = !f;
+	}
+	return result;
+}
+
+Input::Input()
+{
+	memset(_buf, 0, sizeof(_buf));
+	cin >> _buf;
+	int c = _buf[0];
+	if (isdigit(c)){
+		_token = tokNumber;
+	}
+	else if (c == '+' || c == '*' || c == '/' || c == '&' || c == '|' || c== '^' || c == 'x' || c== 'r' || c=='q'){
+		_token = c;
+	}
+	else if (strcmp(_buf, "true") == 0 || strcmp(_buf, "false") == 0){
+		_token = tokBool;
+	}
+	else if(c=='-'){
+		if (isdigit(_buf[1])){
+			_token = tokNumber;
+		}
+		else
+			_token = c;
+	}
+	else{
+		_token = tokError;
+	}
+}
