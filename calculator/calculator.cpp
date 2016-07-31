@@ -65,33 +65,40 @@ bool Calculator::Execute( Input& input )
 int Calculator::Calculate( int num1,int num2,char token )
 {
 	int result;
-	if(token == '+'){
+	switch (token)
+	{
+	case '+':
 		result = num1 + num2;
-	}
-	else if(token == '-'){
+		break;
+	case '-':
 		result = num1 - num2;
-	}
-	else if(token == '*'){
+		break;
+	case '*':
 		result = num1 * num2;
-	}
-	else if(token == '/'){
-		if(num2 == 0){
-			cout <<"Division by zero" << endl;
+		break;
+	case '/':
+		if (num2 == 0){
+			cout << "Division by zero" << endl;
 			result = 0;
 		}
-		else 
+		else
 			result = num1 / num2;
-	}
-	else if (token == '&'){
-		result = num1 & num2;
-	}
-	else if (token == '|'){
-		result = num1 | num2;
-	}
-	else if (token == '^'){
-		result = num1 ^ num2;
-	}
 
+		break;
+	case '&':
+		result = num1 & num2;
+		break;
+	case '|':
+		result = num1 | num2;
+		break;
+
+	case '^':
+		result = num1 ^ num2;
+		break;
+	default:
+		assert(false);
+		break;
+	}
 	return result;
 }
 

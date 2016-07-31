@@ -1,3 +1,3 @@
-<<<<<<< HEAD
-create a new branch is qick in git, i like git very much
+This is tool calc implement. 
+Just with basic plus, sub, mulitple, div operations.
 
